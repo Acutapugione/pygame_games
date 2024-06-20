@@ -1,4 +1,5 @@
 import random
+import time
 import pygame as pg
 
 from config import *
@@ -10,6 +11,8 @@ class Board:
         self.squares = [[0]*SQ_AMOUNT for x in range(SQ_AMOUNT)]
         self.bombs = set()
         self.FONT = pg.font.SysFont(FONT_FAMILY, size=70)
+        self.timer = 0
+
         self.generate_bombs()
         self.create_board()
 
@@ -56,14 +59,26 @@ class Board:
                 if not square.count:
                     self.open_few(c_row, c_col)
                 
-    def draw_bombs(self):
-        # for i in 
-        pass            
+    def draw_bombs(self, surface):
+        for (row, col) in self.bombs:
+            rect = (col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE)
+            pg.draw.rect(surface, BOMB_COLOR, rect)  
+
+    
+      
+
 
     def gameover_text(self, surface):
+        ctime = time.time()
+
         text_surface = self.FONT.render("Game over!", False, (255, 255, 255), 'red')
+
+        if ctime-self.timer > 2:
+            text_surface = self.FONT.render("Press \"R\" to play again", False, (255, 255, 255), 'red')
+        
+        
         surface.blit(text_surface, ( (WIDTH // 2) - (text_surface.get_width() // 2), (HEIGHT // 2) - (text_surface.get_height() // 2) ))  
-    
+
     def win_text(self, surface):
         text_surface = self.FONT.render("You won!", False, (255, 255, 255), 'green')
         surface.blit(text_surface, ( (WIDTH // 2) - (text_surface.get_width() // 2), (HEIGHT // 2) - (text_surface.get_height() // 2) ))  

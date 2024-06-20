@@ -20,12 +20,7 @@ class Game:
                 
                 square = self.board.squares[row][col]
 
-                if self.is_gameover and square.is_bomb:
-                    square.is_visible = True
-
-                if square.is_visible and square.is_bomb:
-                    pg.draw.rect(surface, MINE_COLOR, rect)
-                elif square.is_visible:
+                if square.is_visible:
                     pg.draw.rect(surface, SQUARE_COLOR, rect)
 
                 color = SQUARE_COLOR_VISIBLE if square.is_visible else SQUARE_COLOR

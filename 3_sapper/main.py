@@ -1,3 +1,4 @@
+import time
 import pygame as pg
 import sys 
 
@@ -23,6 +24,10 @@ class Main:
             game.board.place_flag(screen)
             
             if game.is_gameover:
+                if not game.board.timer:
+                    game.board.timer = time.time()
+                    
+                game.board.draw_bombs(screen)
                 game.board.gameover_text(screen)
             elif game.is_won:
                 game.board.win_text(screen)
@@ -63,7 +68,7 @@ class Main:
 
                         if game.check_win():
                             game.is_won = True
-
+                    
                     elif event.button == 3:
                         if not square.is_visible:
                             square.with_flag = not square.with_flag

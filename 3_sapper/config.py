@@ -9,7 +9,7 @@ BOMBS_AMOUNT = SQ_AMOUNT**2 // 10
 BG_COLOR = (107, 101, 100) # gray
 SQUARE_COLOR = (179, 176, 173) # light gray
 SQUARE_COLOR_VISIBLE = (125, 122, 120) # dark gray (border)
-MINE_COLOR = (184, 38, 9) # red
+BOMB_COLOR = (184, 38, 9) # red
 FLAG_COLOR = (242, 122, 27) # orange
 
 FONT_SIZE = SQ_SIZE
