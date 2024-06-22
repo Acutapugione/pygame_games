@@ -1,15 +1,16 @@
 import time
 import pygame as pg
-import sys 
+import sys
 
-from config import *
+from config import Config
 from game import Game
+
 
 class Main:
     def __init__(self) -> None:
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption('Sapper Game')
+        self.screen = pg.display.set_mode((Config.WIDTH, Config.HEIGHT))
+        pg.display.set_caption("Sapper Game")
 
         self.game = Game()
 
@@ -18,41 +19,41 @@ class Main:
         game = self.game
 
         while True:
-            screen.fill(BG_COLOR, ((0, 0), (WIDTH, HEIGHT)))
+            screen.fill(Config.BG_COLOR, ((0, 0), (Config.WIDTH, Config.HEIGHT)))
 
             game.show_board(screen)
             game.board.place_flag(screen)
-            
+
             if game.is_gameover:
                 if not game.board.timer:
                     game.board.timer = time.time()
-                    
+
                 game.board.draw_bombs(screen)
                 game.board.gameover_text(screen)
             elif game.is_won:
                 game.board.win_text(screen)
 
             for event in pg.event.get():
-                if (event.type == pg.QUIT):
+                if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
 
-                elif (event.type == pg.KEYDOWN):
-                    if (event.key == pg.K_ESCAPE):
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
                         pg.quit()
                         sys.exit()
-                    
-                    elif (event.key == pg.K_r):
+
+                    elif event.key == pg.K_r:
                         game.restart_game()
-                
-                elif (event.type == pg.MOUSEBUTTONUP):
+
+                elif event.type == pg.MOUSEBUTTONUP:
                     if game.is_gameover or game.is_won:
                         continue
 
-                    x,y = event.pos
-                    col = x // SQ_SIZE
-                    row = y // SQ_SIZE
-                    
+                    x, y = event.pos
+                    col = x // Config.SQ_SIZE
+                    row = y // Config.SQ_SIZE
+
                     square = game.board.squares[row][col]
 
                     if event.button == 1:
@@ -68,12 +69,13 @@ class Main:
 
                         if game.check_win():
                             game.is_won = True
-                    
+
                     elif event.button == 3:
                         if not square.is_visible:
                             square.with_flag = not square.with_flag
 
             pg.display.update()
+
 
 if __name__ == "__main__":
     m = Main()

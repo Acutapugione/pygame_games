@@ -32,7 +32,7 @@ class Board:
         self.squares_amount = squares_amount
         self.bombs = set()
         self.font = font
-        self.timer = 0
+        self.timer = 0.0
         self.bombs_amount = bombs_amount
 
         self.__squares = self.__generate_squares()
