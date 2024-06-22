@@ -2,7 +2,8 @@ import sys
 
 
 class Config:
-    SQ_AMOUNT = 20
+
+    SQ_AMOUNT = 15
 
     WIDTH, HEIGHT = (800 // SQ_AMOUNT) * SQ_AMOUNT, (800 // SQ_AMOUNT) * SQ_AMOUNT
     SQ_SIZE = WIDTH // SQ_AMOUNT

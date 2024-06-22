@@ -38,9 +38,9 @@ class Main:
                     game.board.timer = time.time()
 
                 game.board.draw_bombs(screen)
-                game.board.gameover_text(screen)
+                game.gameover_text(screen)
             elif game.is_won:
-                game.board.win_text(screen)
+                game.win_text(screen)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:

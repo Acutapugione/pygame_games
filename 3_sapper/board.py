@@ -122,39 +122,13 @@ class Board:
                     self.open_few(c_row, c_col)
 
     def draw_bombs(self, surface):
-        for row, col in self.bombs:
-            rect = (
-                col * Config.SQ_SIZE,
-                row * Config.SQ_SIZE,
-                Config.SQ_SIZE,
-                Config.SQ_SIZE,
-            )
-            pg.draw.rect(surface, Config.BOMB_COLOR, rect)
-
-    # def gameover_text(self, surface):
-    #     ctime = time.time()
-
-    #     text_surface = self.font.render("Game over!", False, (255, 255, 255), "red")
-
-    #     if ctime - self.timer > 2:
-    #         text_surface = self.font.render(
-    #             'Press "R" to play again', False, (255, 255, 255), "red"
-    #         )
-
-    #     surface.blit(
-    #         text_surface,
-    #         (
-    #             (Config.WIDTH // 2) - (text_surface.get_width() // 2),
-    #             (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
-    #         ),
-    #     )
-
-    # def win_text(self, surface):
-    #     text_surface = self.font.render("You won!", False, (255, 255, 255), "green")
-    #     surface.blit(
-    #         text_surface,
-    #         (
-    #             (Config.WIDTH // 2) - (text_surface.get_width() // 2),
-    #             (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
-    #         ),
-    #     )
+        for row, col in zip(range(self.squares_amount), range(self.squares_amount)):
+            cell = self.bombs[row, col]
+            if cell:
+                rect = (
+                    col * Config.SQ_SIZE,
+                    row * Config.SQ_SIZE,
+                    Config.SQ_SIZE,
+                    Config.SQ_SIZE,
+                )
+                pg.draw.rect(surface, Config.BOMB_COLOR, rect)
