@@ -51,6 +51,9 @@ class Board:
             rect = (col * square_size, row * square_size, square_size, square_size)
             square = self.squares[row][col]
             color = square_visible_color if square.is_visible else square_color
+            if square.is_visible:
+                pg.draw.rect(surface, square_color, rect)
+
             pg.draw.rect(surface, color, rect, width=1)
             if square.count and square.is_visible:
                 text_surface = self.font.render(str(square.count), False, (0, 0, 0))
