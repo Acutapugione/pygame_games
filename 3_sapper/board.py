@@ -37,8 +37,8 @@ class Board:
         )
         self.bombs = self.bomb_generator.generate()
         pprint(self.bombs)
-        self.__squares = self.__generate_squares()
-        pprint(self.__squares)
+        self.squares = self.__generate_squares()
+        pprint(self.squares)
 
     def show(
         self,
@@ -49,7 +49,7 @@ class Board:
     ):
         for row, col in zip(range(self.squares_amount), range(self.squares_amount)):
             rect = (col * square_size, row * square_size, square_size, square_size)
-            square = self.__squares[row][col]
+            square = self.squares[row][col]
             color = square_visible_color if square.is_visible else square_color
             pg.draw.rect(surface, color, rect, width=1)
             if square.count and square.is_visible:
@@ -72,23 +72,6 @@ class Board:
             for col in range(self.squares_amount)
         )
 
-    # def create_board(self):
-    #     for row in range(SQ_AMOUNT):
-    #         for col in range(SQ_AMOUNT):
-    #             if not (row, col) in self.bombs:
-    #                 count = self.count_bombs_around(row, col)
-    #                 self.squares[row][col] = Square(row=row, col=col, count=count)
-
-    def generate_bombs(self):
-        while len(self.bombs) != self.bombs_amount:
-            bomb_row, bomb_col = random.randint(
-                0, Config.SQ_AMOUNT - 1
-            ), random.randint(0, Config.SQ_AMOUNT - 1)
-            self.bombs.add((bomb_row, bomb_col))
-            self.squares[bomb_row][bomb_col] = Square(
-                row=bomb_row, col=bomb_col, count=0, is_bomb=True
-            )
-
     def count_bombs_around(self, row: int, col: int):
         count = 0
         for c_row in range(
@@ -108,7 +91,7 @@ class Board:
         return count
 
     def place_flag(self, surface):
-        for row in self.__squares:
+        for row in self.squares:
             for square in row:
                 if square.with_flag:
                     rect = (
