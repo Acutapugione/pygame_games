@@ -7,6 +7,8 @@ class Config:
     WIDTH, HEIGHT = (800 // SQ_AMOUNT) * SQ_AMOUNT, (800 // SQ_AMOUNT) * SQ_AMOUNT
     SQ_SIZE = WIDTH // SQ_AMOUNT
     BOMBS_AMOUNT = SQ_AMOUNT**2 // 10
+    # MUST BE LOWER OR EQUAL 100
+    BOMBS_CHANCE = 50
 
     BG_COLOR = (107, 101, 100)  # gray
     SQUARE_COLOR = (179, 176, 173)  # light gray

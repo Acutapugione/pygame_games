@@ -1,3 +1,4 @@
+from pprint import pprint
 import random
 import time
 import pygame as pg
@@ -15,45 +16,59 @@ from config import Config
 #     FLAG_COLOR,
 # )
 from square import Square
+from bomb import BombGenerator
 
 
 class Board:
     def __init__(
         self,
+        font: Font,
         squares_amount: int = Config.SQ_AMOUNT,
-        font: Font = SysFont(Config.FONT_FAMILY, size=70),
         bombs_amount: int = Config.BOMBS_AMOUNT,
     ) -> None:
-        # self.__squares = tuple(
-        #     tuple(0 for row in range(squares_amount)) for col in range(squares_amount)
-        # )
-        print(f"{self.squares=}")
-        # self.squares = ((0) * squares_amount for x in range(squares_amount))
         self.squares_amount = squares_amount
-        self.bombs = set()
         self.font = font
+        # self.bombs = set()
         self.timer = 0.0
         self.bombs_amount = bombs_amount
-
+        self.bomb_generator = BombGenerator(
+            (self.squares_amount, self.squares_amount),
+            self.bombs_amount,
+        )
+        self.bombs = self.bomb_generator.generate()
+        pprint(self.bombs)
         self.__squares = self.__generate_squares()
+        pprint(self.__squares)
 
-        self.generate_bombs()
-        # self.create_board()
+    def show(
+        self,
+        surface,
+        square_size=Config.SQ_SIZE,
+        square_color=Config.SQUARE_COLOR,
+        square_visible_color=Config.SQUARE_COLOR_VISIBLE,
+    ):
+        for row, col in zip(range(self.squares_amount), range(self.squares_amount)):
+            rect = (col * square_size, row * square_size, square_size, square_size)
+            square = self.__squares[row][col]
+            color = square_visible_color if square.is_visible else square_color
+            pg.draw.rect(surface, color, rect, width=1)
+            if square.count and square.is_visible:
+                text_surface = self.font.render(str(square.count), False, (0, 0, 0))
+                center_multiplier = (  # half of text width
+                    square_size + (square_size // 2) - (text_surface.get_width() // 2)
+                )
+                text_rect = (
+                    (col * center_multiplier),  # x = center - half of text width
+                    (row * center_multiplier),  # y = center - half of text height
+                )
+                surface.blit(text_surface, text_rect)
 
-    @property
-    def squares(self) -> list[list[Square]]:
-        result = []
-        for row in range(self.squares_amount):
-            result.append([])
-            for col in range(self.squares_amount):
-                if not (row, col) in self.bombs:
-                    count = self.count_bombs_around(row, col)
-                    result[-1].append(Square(row=row, col=col, count=count))
-        return result
-
-    def __generate_squares(self) -> tuple[tuple[int, ...], ...]:
+    def __generate_squares(self) -> tuple[tuple[Square, ...], ...]:
         return tuple(
-            tuple(0 for row in range(self.squares_amount))
+            tuple(
+                (Square(row=row, col=col, is_bomb=self.bombs[row, col] != 0))
+                for row in range(self.squares_amount)
+            )
             for col in range(self.squares_amount)
         )
 
@@ -93,7 +108,7 @@ class Board:
         return count
 
     def place_flag(self, surface):
-        for row in self.squares:
+        for row in self.__squares:
             for square in row:
                 if square.with_flag:
                     rect = (
@@ -133,30 +148,30 @@ class Board:
             )
             pg.draw.rect(surface, Config.BOMB_COLOR, rect)
 
-    def gameover_text(self, surface):
-        ctime = time.time()
+    # def gameover_text(self, surface):
+    #     ctime = time.time()
 
-        text_surface = self.font.render("Game over!", False, (255, 255, 255), "red")
+    #     text_surface = self.font.render("Game over!", False, (255, 255, 255), "red")
 
-        if ctime - self.timer > 2:
-            text_surface = self.font.render(
-                'Press "R" to play again', False, (255, 255, 255), "red"
-            )
+    #     if ctime - self.timer > 2:
+    #         text_surface = self.font.render(
+    #             'Press "R" to play again', False, (255, 255, 255), "red"
+    #         )
 
-        surface.blit(
-            text_surface,
-            (
-                (Config.WIDTH // 2) - (text_surface.get_width() // 2),
-                (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
-            ),
-        )
+    #     surface.blit(
+    #         text_surface,
+    #         (
+    #             (Config.WIDTH // 2) - (text_surface.get_width() // 2),
+    #             (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
+    #         ),
+    #     )
 
-    def win_text(self, surface):
-        text_surface = self.font.render("You won!", False, (255, 255, 255), "green")
-        surface.blit(
-            text_surface,
-            (
-                (Config.WIDTH // 2) - (text_surface.get_width() // 2),
-                (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
-            ),
-        )
+    # def win_text(self, surface):
+    #     text_surface = self.font.render("You won!", False, (255, 255, 255), "green")
+    #     surface.blit(
+    #         text_surface,
+    #         (
+    #             (Config.WIDTH // 2) - (text_surface.get_width() // 2),
+    #             (Config.HEIGHT // 2) - (text_surface.get_height() // 2),
+    #         ),
+    #     )

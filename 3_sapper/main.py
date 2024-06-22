@@ -4,6 +4,8 @@ import sys
 
 from config import Config
 from game import Game
+from board import Board
+from pygame.font import Font, SysFont
 
 
 class Main:
@@ -11,8 +13,15 @@ class Main:
         pg.init()
         self.screen = pg.display.set_mode((Config.WIDTH, Config.HEIGHT))
         pg.display.set_caption("Sapper Game")
-
-        self.game = Game()
+        font = SysFont(
+            Config.FONT_FAMILY,
+            size=Config.FONT_SIZE,
+        )
+        board = Board(font=font)
+        self.game = Game(
+            font=font,
+            board=board,
+        )
 
     def main(self):
         screen = self.screen
